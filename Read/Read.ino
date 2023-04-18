@@ -76,7 +76,7 @@ void setup() {
     // Connect to WPA/WPA2 network. Change this line if using open or WEP network:
     // status = WiFi.begin(ssid, pass);
 
-    status = WiFi.begin(ssid);
+    status = WiFi.begin(ssid, pass);
 
     // wait 10 seconds for connection:
 
@@ -152,7 +152,7 @@ void loop() {
       // Serial.println(colors[i]);
     }
     NeoPixel.clear();
-    if (!set) {
+    
       for (int i = 0; i < NUM_PIXELS; ++i) {
         NeoPixel.setPixelColor(i, colors[i]);
         // Serial.println("yep");
@@ -160,8 +160,8 @@ void loop() {
       NeoPixel.show();
       Serial.println(NeoPixel.Color(50, 0, 0));
       Serial.println("showing");
-      set = true;
-    }
+      // set = true;
+    
     
   }
   // Serial.print(message);

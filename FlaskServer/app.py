@@ -12,10 +12,11 @@ app.config['UPLOAD_FOLDER'] = '/images'
 #     def __init__(self):
 #         self.image = [[0] * 32] * 8
         
-global image 
+global image
+image = None
 # image = [[0] * 32] * 8
 
-def color (r, g, b):
+def color (b, g, r):
     return (r << 16) | (g << 8) | b
 
 def allowed_file(filename):
@@ -51,10 +52,13 @@ def readFile():
 
         
         # image = cv2.imread(img)
-        image = cv2.resize(image, (8, 32), interpolation = cv2.INTER_AREA)
+        image = cv2.resize(image, (32, 8), interpolation = cv2.INTER_AREA)
         
         return "success"
 
+@app.route("/image")
+def showImage():
+    return "image"
 
 @app.route("/data")
 def sendImage():
@@ -66,17 +70,30 @@ def sendImage():
         
         return {"colors": [color(0, 0, 0)] * 32 * 8}
     colors = []
-    for i in range(0,image.shape[0]):
-        for j in range(0,image.shape[1]):
-            # pixel = image[i, j]
-            # print(color(image[i,j,0], image[i,j,1],image[i,j,2]))
-            colors.append(int(color(image[i,j,0], image[i,j,1],image[i,j,2])))
+    for i in range(0,image.shape[1]):
+        if i % 2 == 0:
+            for j in range(0,image.shape[0]):
+                # pixel = image[i, j]
+                # print(color(image[i,j,0], image[i,j,1],image[i,j,2]))
+                colors.append(int(color(image[j,i,0], image[j,i,1],image[j,i,2])))
+        else:
+            for j in range(image.shape[0]-1, -1, -1):
+                # pixel = image[i, j]
+                # print(color(image[i,j,0], image[i,j,1],image[i,j,2]))
+                colors.append(int(color(image[j,i,0], image[j,i,1],image[j,i,2])))
+            
+        # for j in range(0,image.shape[1]):
+        #     # pixel = image[i, j]
+        #     # print(color(image[i,j,0], image[i,j,1],image[i,j,2]))
+        #     colors.append(int(color(image[i,j,0], image[i,j,1],image[i,j,2])))
         
     return {"colors": colors}
     # return {"colors": [color(250, 250, 250)] * 32 * 8}
 
 if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=3000)
+    # app.run(host="127.0.0.1", port=3000)
+    app.run(host="172.20.10.5", port=3000)
+
     # can alter host and port number here. Right now the default host is localhost and port is 5000
     app.run(debug=True)
     
