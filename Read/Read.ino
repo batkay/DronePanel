@@ -17,7 +17,7 @@ WiFiClient client;
 bool print = false;
 
 // server address:
-//char server[] = "example.org";
+// ip of my macbook
 IPAddress server(172, 20, 10, 5);
 int port = 3000;
 unsigned long lastConnectionTime = 0;  // last time you connected to the server, in milliseconds
@@ -132,12 +132,15 @@ void loop() {
     //   Serial.println(message);
     // }
     
+    // get the message from the json string
     int len = message.substring(message.indexOf("[") + 1, message.indexOf("]")).length() + 1;
     char buf [len];
     message.substring(message.indexOf("[") + 1, message.indexOf("]")).toCharArray(buf, len);
     char* ptr = strtok(buf, ",");
     int i = 0;
     // Serial.println(message.substring(message.indexOf("[") + 1, message.indexOf("]")));
+
+    // extract out the number data
     Serial.println("Splitting");
     while(ptr != NULL) {
       colors[i] = atoi(ptr);
@@ -148,9 +151,8 @@ void loop() {
     }
     Serial.println("\nDone split");
     Serial.println(colors[0]);
-    for (int i = 0; i < len; ++i) {
-      // Serial.println(colors[i]);
-    }
+    
+    // print it onto the neopixel
     NeoPixel.clear();
     
       for (int i = 0; i < NUM_PIXELS; ++i) {
