@@ -1,7 +1,9 @@
 import os
 from flask import Flask, flash, request, redirect, url_for, render_template
+import re
 import cv2
 import numpy as np
+import urllib.request
 
 app = Flask(__name__)
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'img'}
@@ -30,6 +32,27 @@ def home():
 @app.route("/upload")
 def upload():
     return render_template("page.html")
+
+
+@app.route('/hook', methods=['POST'])
+def get_image():
+    global image
+    # print('request.method', request.method)
+    # print('request.args', request.args)
+    # print('request.form', request.form)
+    # print('request.files', request.files)
+    data = request.form
+    encoded_data = data['imageBase64']
+    # print(encoded_data)
+    resp = urllib.request.urlopen(encoded_data)
+    img = np.asarray(bytearray(resp.read()), dtype="uint8")
+    image = cv2.imdecode(img, cv2.IMREAD_COLOR)
+    # print(image)
+    # nparr = np.fromstring(encoded_data, np.uint8)
+    image = cv2.resize(image, (32, 8), interpolation = cv2.INTER_AREA)
+
+    
+    return 'Success'
 
 # given a post request, take the included image file and write it to the global variable
 @app.route("/uploader", methods = ["GET", "POST"])
@@ -70,6 +93,7 @@ def sendImage():
         
         return {"colors": [color(0, 0, 0)] * 32 * 8}
     colors = []
+    #bprint(image)
     for i in range(0,image.shape[1]):
         if i % 2 == 0:
             for j in range(0,image.shape[0]):
@@ -86,7 +110,7 @@ def sendImage():
 # make it on the ip of my macbook on my hotspot
 if __name__ == "__main__":
     # app.run(host="127.0.0.1", port=3000)
-    app.run(host="172.20.10.5", port=3000)
+    app.run(host="172.20.10.5", port=5000)
 
     # can alter host and port number here. Right now the default host is localhost and port is 5000
     app.run(debug=True)

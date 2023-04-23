@@ -5,8 +5,8 @@
 
 #include "arduino_secrets.h"
 ///////please enter your sensitive data in the Secret tab/arduino_secrets.h
-char ssid[] = SECRET_SSID;           // your network SSID (name)
-char pass[] = SECRET_OPTIONAL_PASS;  // your network password (use for WPA, or use as key for WEP)
+char ssid[] = "Dave Phone";           // your network SSID (name)
+char pass[] = "TmYZ-cO3O-4iak-wKXo";  // your network password (use for WPA, or use as key for WEP)
 int keyIndex = 0;                    // your network key Index number (needed only for WEP)
 
 int status = WL_IDLE_STATUS;
@@ -19,7 +19,7 @@ bool print = false;
 // server address:
 // ip of my macbook
 IPAddress server(172, 20, 10, 5);
-int port = 3000;
+int port = 5000;
 unsigned long lastConnectionTime = 0;  // last time you connected to the server, in milliseconds
 
 const unsigned long postingInterval = 10L * 1000L;  // delay between updates, in milliseconds
@@ -30,7 +30,7 @@ int colors[8*32];
 int lenCol = 8*32;
 bool set = false;
 
-#define PIN_NEO_PIXEL  12   // Arduino pin that connects to NeoPixel
+#define PIN_NEO_PIXEL  11   // Arduino pin that connects to NeoPixel
 #define NUM_PIXELS     8*32  // The number of LEDs (pixels) on NeoPixel
 #define DELAY_INTERVAL 1
 Adafruit_NeoPixel NeoPixel(NUM_PIXELS, PIN_NEO_PIXEL, NEO_GRB + NEO_KHZ800);
@@ -41,10 +41,8 @@ void setup() {
 
   Serial.begin(9600);
 
-  while (!Serial) {
-
-    ;  // wait for serial port to connect. Needed for native USB port only
-  }
+  
+  pinMode(LED_BUILTIN, OUTPUT);
 
   // check for the WiFi module:
 
@@ -57,6 +55,7 @@ void setup() {
     while (true)
       ;
   }
+
 
   String fv = WiFi.firmwareVersion();
 
@@ -77,11 +76,13 @@ void setup() {
     // status = WiFi.begin(ssid, pass);
 
     status = WiFi.begin(ssid, pass);
+    digitalWrite(LED_BUILTIN, HIGH);         // will turn the LED on
 
     // wait 10 seconds for connection:
 
     delay(10000);
   }
+  digitalWrite(LED_BUILTIN, LOW);         // will turn the LED on
 
   // you're connected now, so print out the status:
 

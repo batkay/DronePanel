@@ -1,11 +1,47 @@
 <!DOCTYPE html>
 <head>
     <title>Image Upload</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
 </head>
-<body>
+<body style="background:grey">
+    
+        <div>
+          <canvas
+            id="canvas"
+            width="800"
+            height="200"
+            style="border: 1px solid black; border-color: white;"
+          ></canvas>
+        </div>
+        <div style="margin-top:5px">
+          <span style = "color: white;">Color: </span>
+          
+          <input type="radio" name="colorRadio" value="white" />
+          <label for="black" style = "color: white;">White</label>
+          <input type="radio" name="colorRadio" value="red" />
+          <label for="black" style = "color: white;">Red</label>
+          <input type="radio" name="colorRadio" value="green" />
+          <label for="black" style = "color: white;">Green</label>
+          <input type="radio" name="colorRadio" value="blue" />
+          <label for="black" style = "color: white;">Blue</label>
+        </div>
+        <div style="margin-top:5px">
+          <button id="clear" >Clear</button>
+        </div>
+        <br />
+        <div>
+        <button id="send"> Send </button>
+          <br />
+          <br/>
+        </div>
+
+        <script src="../static/index.js"></script>
+    
+
         <form action = "/uploader" method = "POST" enctype="multipart/form-data" />
             <input type="file" name="image" />
-            <button type="submit" name = "Upload"> Submit <button>
+            <button type="submit" name = "Upload"> Submit </button>
         </form>
 </body>
 </html>
